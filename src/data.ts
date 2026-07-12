@@ -33,7 +33,7 @@ export const LINKS = {
 
 export const KICKOFF = {
   dayLabel: "Thursday · July 16",
-  time: "7:30 AM",
+  time: "10:00 AM",
   tz: "CST",
   required: false,
   note: "Not required — but highly recommended. It's day one of the course.",

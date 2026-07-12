@@ -1,8 +1,21 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ScrambleIn } from "../components/ScrambleText";
 import { COURSE } from "../data";
 
 export function Hero({ entranceComplete }: { entranceComplete: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.defaultMuted = true;
+      videoRef.current.play().catch((err) => {
+        console.warn("Hero video autoplay failed:", err);
+      });
+    }
+  }, []);
+
   return (
     <section
       id="top"
@@ -10,11 +23,13 @@ export function Hero({ entranceComplete }: { entranceComplete: boolean }) {
     >
       {/* Video background */}
       <video
+        ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         autoPlay
         muted
         loop
         playsInline
+        defaultMuted
         poster="/assets/hero-poster.jpg"
       >
         <source src="/assets/intro.mp4" type="video/mp4" />

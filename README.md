@@ -18,7 +18,7 @@ a modern, Gen-Z-friendly first impression.
 - **Watch the intro** — a dedicated video player *with sound* (play/pause, volume, scrubber).
 - **Course at a glance** — animated count-up metrics.
 - **What's in D2L** — material cards (lab manual, Notebook LM, LockDown Browser, STAR Bundle, textbook, gear).
-- **Zoom kickoff** — Thursday, July 16 · 7:30 AM CST (optional, highly recommended).
+- **Zoom kickoff** — Thursday, July 16 · 10:00 AM CST (optional, highly recommended).
 - **6-week roadmap** — timeline of chapters, exams and lab practicals.
 - **Grading & key dates** — animated progress bars + a "don't get dropped" warning.
 - **Footer** — instructor contact + OTS tech support.

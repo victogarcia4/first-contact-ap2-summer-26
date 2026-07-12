@@ -1,7 +1,20 @@
+import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { KICKOFF, LINKS } from "../data";
 
 export function Kickoff() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.defaultMuted = true;
+      videoRef.current.play().catch((err) => {
+        console.warn("Kickoff video autoplay failed:", err);
+      });
+    }
+  }, []);
+
   return (
     <section
       id="kickoff"
@@ -9,11 +22,14 @@ export function Kickoff() {
     >
       {/* Video background reused, heavily tinted */}
       <video
+        ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover opacity-30"
         autoPlay
         muted
         loop
         playsInline
+        defaultMuted
+        poster="/assets/hero-poster.jpg"
       >
         <source src="/assets/intro.mp4" type="video/mp4" />
       </video>
