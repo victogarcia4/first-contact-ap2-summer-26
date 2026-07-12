@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A&amp;P II · Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --cyan: #38e1ff;
+        --pulse: #ff3b6b;
+        --gold: #fdb515;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        background: #000; color: #fff; overflow-x: hidden;
+        font-family: "Space Mono", monospace;
+        -webkit-font-smoothing: antialiased;
+      }
+      ::selection { background: var(--cyan); color: #000; }
+      a { color: inherit; text-decoration: none; }
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+      .cyan { color: var(--cyan); }
+      .pulse { color: var(--pulse); }
+      .gold { color: var(--gold); }
+
+      /* Reveal on scroll */
+      .reveal { opacity: 0; transform: translateY(28px); transition: all .8s cubic-bezier(.215,.61,.355,1); }
+      .reveal.in { opacity: 1; transform: none; }
+
+      /* Navbar */
+      header {
+        position: fixed; inset: 0 0 auto 0; height: 76px; z-index: 50;
+        display: flex; align-items: center;
+      }
+      .nav { display: flex; align-items: center; justify-content: space-between; width: 100%; }
+      .pill {
+        display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 18px;
+        border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.1);
+        backdrop-filter: blur(10px); border-radius: 14px; font-weight: 700; font-size: 14px;
+      }
+      .nav-links { display: none; gap: 4px; }
+      .nav-links a { padding: 8px 12px; font-size: 13px; color: rgba(255,255,255,.75); border-radius: 10px; }
+      .nav-links a:hover { background: rgba(255,255,255,.1); color: #fff; }
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center;
+        background: var(--cyan); color: #000; font-weight: 700; border-radius: 999px;
+        padding: 12px 22px; font-size: 13px; transition: .2s;
+      }
+      .btn:hover { background: #fff; }
+      .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,.25); color: #fff; }
+      .btn-ghost:hover { background: rgba(255,255,255,.1); border-color: #fff; }
+      @media (min-width: 768px) { .nav-links { display: flex; } }
+
+      /* Hero */
+      .hero {
+        position: relative; min-height: 100vh; display: flex; flex-direction: column;
+        overflow: hidden; padding: 96px 32px 40px;
+      }
+      .hero video, .kickoff video {
+        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+      }
+      .veil1 { position: absolute; inset: 0; background: rgba(0,0,0,.55); }
+      .veil2 { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,.7), rgba(0,0,0,.2) 45%, rgba(0,0,0,.92)); }
+      .dots { position: absolute; inset: 0; opacity: .06; background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 24px 24px; }
+      .watermark {
+        position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; overflow: hidden;
+        pointer-events: none;
+      }
+      .watermark span {
+        font-family: "Anton", sans-serif; text-transform: uppercase; line-height: 1;
+        font-size: clamp(90px, 26vw, 460px); letter-spacing: -4px; opacity: .08; color: var(--cyan);
+        transform: translateY(30px);
+      }
+      .eyebrow { position: relative; z-index: 10; font-size: 12px; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.6); display: flex; gap: 12px; flex-wrap: wrap; }
+      .spacer { flex: 1; }
+      .hero-bottom { position: relative; z-index: 10; display: flex; flex-direction: column; gap: 24px; }
+      .hero h1 { font-weight: 300; line-height: .92; letter-spacing: -.03em; font-size: clamp(44px, 10vw, 108px); }
+      .hero p { max-width: 440px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.7); }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+      .datebadge { }
+      .datebadge .lbl { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+      .datebadge .big { font-weight: 300; line-height: .95; letter-spacing: -.03em; font-size: clamp(30px, 6vw, 64px); }
+      @media (min-width: 768px) {
+        .hero-bottom { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+        .datebadge { text-align: right; }
+      }
+      .cue { position: relative; z-index: 10; margin-top: 24px; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+      .bounce { display: inline-block; animation: bounce 1.4s infinite; }
+      @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(5px)} }
+
+      /* Ticker */
+      .ticker { border-top: 1px solid rgba(255,255,255,.1); border-bottom: 1px solid rgba(255,255,255,.1); padding: 16px 0; overflow: hidden; }
+      .ticker .track { display: flex; gap: 32px; width: max-content; animation: marquee 28s linear infinite; white-space: nowrap; }
+      .ticker span { display: inline-flex; gap: 32px; align-items: center; font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.45); }
+      @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+      section.block { padding: 112px 0; position: relative; }
+      .kicker { font-size: 13px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+      h2.big { font-weight: 300; line-height: 1.05; letter-spacing: -.02em; font-size: clamp(30px, 6vw, 56px); }
+      .lead { margin-top: 20px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,.55); max-width: 640px; }
+
+      /* Welcome */
+      .welcome { text-align: center; }
+      .welcome p { font-weight: 400; line-height: 1.4; letter-spacing: -.02em; font-size: clamp(22px, 4vw, 38px); max-width: 900px; margin: 0 auto; }
+
+      /* Metrics */
+      .metrics { display: grid; grid-template-columns: repeat(2,1fr); gap: 48px; text-align: center; }
+      .metrics .val { font-weight: 300; line-height: 1; letter-spacing: -.04em; font-size: clamp(40px, 9vw, 84px); }
+      .metrics .lbl { margin-top: 12px; font-size: 14px; color: rgba(255,255,255,.45); }
+      @media (min-width: 768px) { .metrics { grid-template-columns: repeat(4,1fr); } }
+      .glow { position: absolute; left: 50%; top: 50%; width: 600px; height: 600px; transform: translate(-50%,-50%); border-radius: 999px; opacity: .18; filter: blur(80px); background: radial-gradient(circle, rgba(56,225,255,.35), transparent 70%); pointer-events: none; }
+
+      /* Cards */
+      .cards { display: grid; grid-template-columns: 1fr; gap: 20px; margin-top: 24px; }
+      @media (min-width: 640px) { .cards { grid-template-columns: repeat(2,1fr); } }
+      @media (min-width: 1024px) { .cards { grid-template-columns: repeat(3,1fr); } }
+      .card { position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); border-radius: 16px; padding: 24px; transition: .3s; }
+      .card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,.25); }
+      .card .bar { position: absolute; left: 0; top: 0; height: 100%; width: 3px; }
+      .card .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+      .emoji { font-size: 28px; }
+      .chip { border: 1px solid; border-radius: 999px; padding: 4px 12px; font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+      .card h3 { font-size: 17px; }
+      .card .body { margin-top: 12px; font-size: 13px; line-height: 1.7; color: rgba(255,255,255,.55); }
+
+      /* Kickoff */
+      .kickoff { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 112px 24px; }
+      .kickoff .veil { position: absolute; inset: 0; background: rgba(0,0,0,.7); }
+      .kickoff video { opacity: .3; }
+      .ring { position: relative; width: 112px; height: 112px; margin: 0 auto 40px; }
+      .ring .spin { position: absolute; inset: 0; border-radius: 999px; background: conic-gradient(from 0deg, transparent 0deg, var(--cyan) 90deg, transparent 200deg); -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); mask: radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 3px)); animation: spin 8s linear infinite; }
+      @keyframes spin { to { transform: rotate(360deg); } }
+      .ring .core { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid rgba(255,255,255,.1); background: rgba(0,0,0,.6); font-size: 34px; }
+      .badge { display: inline-block; border: 1px solid rgba(56,225,255,.4); background: rgba(56,225,255,.1); color: var(--cyan); border-radius: 999px; padding: 6px 16px; font-size: 11px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+      .kickoff h2 { margin-top: 24px; font-weight: 300; line-height: 1.02; letter-spacing: -.03em; font-size: clamp(38px, 8vw, 84px); }
+      .kickoff .time { margin-top: 16px; font-size: 22px; color: rgba(255,255,255,.8); }
+      .kickoff .note { margin: 24px auto 0; max-width: 460px; font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.6); }
+
+      /* Roadmap */
+      .timeline { position: relative; max-width: 800px; }
+      .timeline .line { position: absolute; left: 8px; top: 8px; bottom: 0; width: 1px; background: linear-gradient(to bottom, rgba(56,225,255,.6), rgba(255,255,255,.15), transparent); }
+      .step { position: relative; padding-left: 44px; margin-bottom: 40px; }
+      .step .dot { position: absolute; left: 0; top: 6px; width: 17px; height: 17px; border-radius: 999px; border: 2px solid var(--cyan); background: #000; }
+      .step .wk { font-weight: 700; font-size: 18px; }
+      .step .dt { font-size: 12px; letter-spacing: .15em; text-transform: uppercase; color: var(--cyan); margin-left: 12px; }
+      .step .focus { margin-top: 4px; font-size: 17px; color: rgba(255,255,255,.85); }
+      .step .detail { margin-top: 4px; font-size: 13px; line-height: 1.6; color: rgba(255,255,255,.45); }
+
+      /* Grading */
+      .two { display: grid; grid-template-columns: 1fr; gap: 64px; }
+      @media (min-width: 768px) { .two { grid-template-columns: 1fr 1fr; } }
+      .grow { margin-bottom: 6px; display: flex; justify-content: space-between; align-items: baseline; font-size: 14px; }
+      .grow .d { color: rgba(255,255,255,.45); font-size: 13px; }
+      .grow .p { color: var(--cyan); font-weight: 700; width: 48px; text-align: right; }
+      .track { height: 8px; background: rgba(255,255,255,.1); border-radius: 999px; overflow: hidden; }
+      .track i { display: block; height: 100%; border-radius: 999px; background: linear-gradient(to right, var(--cyan), var(--pulse)); width: 0; transition: width 1s ease; }
+      .datebox { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); border-radius: 12px; padding: 16px; }
+      .datebox .k { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+      .datebox .v { margin-top: 4px; font-size: 16px; font-weight: 700; }
+      .dategrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .warn { margin-top: 16px; border: 1px solid rgba(255,59,107,.3); background: rgba(255,59,107,.05); border-radius: 12px; padding: 20px; }
+
+      /* Footer */
+      footer { border-top: 1px solid rgba(255,255,255,.1); }
+      .foot { display: grid; grid-template-columns: 1fr; gap: 48px; padding: 64px 0; }
+      @media (min-width: 768px) { .foot { grid-template-columns: 1.2fr 1fr; } }
+      .support { margin-top: 32px; border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.03); border-radius: 12px; padding: 20px; }
+      .foot a.link { color: rgba(255,255,255,.6); font-size: 13px; }
+      .foot a.link:hover { color: var(--cyan); }
+      .copyr { border-top: 1px solid rgba(255,255,255,.1); padding: 24px 0; font-size: 11px; color: rgba(255,255,255,.3); }
+      .banner { background: var(--gold); color: #000; text-align: center; font-size: 12px; font-weight: 700; padding: 8px; }
+    </style>
+  </head>
+  <body>
+    <div class="banner">👀 LOCAL PREVIEW — open with a double-click. The real app is the React project (npm run dev).</div>
+
+    <header>
+      <div class="wrap nav">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <a href="#top" class="pill">◈ A&amp;P<span class="cyan">&nbsp;II</span></a>
+          <nav class="nav-links pill" style="padding:4px 8px; font-weight:400;">
+            <a href="#start">Start</a>
+            <a href="#materials">Materials</a>
+            <a href="#roadmap">Roadmap</a>
+          </nav>
+        </div>
+        <a href="#kickoff" class="btn">Join the kickoff</a>
+      </div>
+    </header>
+
+    <!-- HERO -->
+    <section id="top" class="hero">
+      <video autoplay muted loop playsinline poster="">
+        <source src="Intro to AP.mp4" type="video/mp4" />
+      </video>
+      <div class="veil1"></div>
+      <div class="veil2"></div>
+      <div class="dots"></div>
+      <div class="watermark"><span>ANATOMY</span></div>
+
+      <div class="eyebrow"><span class="cyan">●</span><span>BIOL 2402</span><span style="opacity:.3">/</span><span>Summer 2026</span><span style="opacity:.3">/</span><span>Session 6W2</span></div>
+      <div class="spacer"></div>
+      <div class="hero-bottom">
+        <div style="display:flex; flex-direction:column; gap:20px;">
+          <h1>Anatomy<br /><span class="cyan">&amp; Physiology</span></h1>
+          <p>Part two of the human body's operating system — endocrine, circulatory, immune, respiratory, digestive, reproductive &amp; urinary. Six weeks. One comprehensive map of how you actually work.</p>
+          <div class="cta-row">
+            <a href="#kickoff" class="btn">Join the July 16 kickoff</a>
+            <a href="#materials" class="btn btn-ghost">What's in D2L →</a>
+          </div>
+        </div>
+        <div class="datebadge">
+          <div class="lbl">Class begins</div>
+          <div class="big">Jul 16</div>
+          <div style="font-size:12px; color:rgba(255,255,255,.5)">Thursday · 2026</div>
+        </div>
+      </div>
+      <div class="cue"><span class="bounce">↓</span> Scroll to explore</div>
+    </section>
+
+    <!-- TICKER -->
+    <div class="ticker">
+      <div class="track" id="ticker"></div>
+    </div>
+
+    <!-- WELCOME -->
+    <section id="start" class="block welcome">
+      <div class="wrap reveal">
+        <p>Welcome to A&amp;P II. A continuation of everything you built in 2401 — but now we connect the systems. You'll map how the body <span class="cyan">senses</span>, <span class="pulse">defends</span>, feeds, filters and reproduces, and how all of it holds <span class="cyan">homeostasis</span> together.</p>
+        <div style="margin-top:48px; font-size:11px; letter-spacing:.25em; text-transform:uppercase; color:rgba(255,255,255,.4)">Your instructor</div>
+        <div style="margin-top:4px; font-size:15px; color:rgba(255,255,255,.8)">Dr. Victor Garcia Martinez</div>
+      </div>
+    </section>
+
+    <!-- INTRO PLAYER (with sound) -->
+    <section id="intro" class="block" style="overflow:hidden;">
+      <div class="glow" style="top:33%; opacity:.14;"></div>
+      <div class="wrap" style="position:relative; max-width:880px;">
+        <div class="reveal" style="text-align:center; margin-bottom:40px;">
+          <div class="kicker">Press play · turn the sound on</div>
+          <h2 class="big">Watch the <span class="cyan">intro</span>.</h2>
+          <p class="lead" style="margin-left:auto; margin-right:auto; text-align:center;">A quick hello and a walkthrough of how this course works. Hit play, unmute, and get the full picture before day one.</p>
+        </div>
+        <div class="reveal" style="overflow:hidden; border:1px solid rgba(255,255,255,.15); border-radius:16px; background:rgba(255,255,255,.02); box-shadow:0 0 60px -20px rgba(56,225,255,.5);">
+          <video style="width:100%; aspect-ratio:16/9; background:#000; display:block;" controls playsinline preload="metadata">
+            <source src="Intro to AP.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <p style="margin-top:16px; text-align:center; font-size:12px; color:rgba(255,255,255,.35)">🔊 Audio plays here — the background clips elsewhere on the page stay muted so the page can autoplay them.</p>
+      </div>
+    </section>
+
+    <!-- METRICS -->
+    <section class="block" style="overflow:hidden;">
+      <div class="glow"></div>
+      <div class="wrap" style="position:relative;">
+        <div class="reveal" style="text-align:center; font-size:13px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:64px;">The course at a glance</div>
+        <div class="metrics">
+          <div class="reveal"><div class="val" data-count="6" data-suffix="wk">0wk</div><div class="lbl">Fast-track session</div></div>
+          <div class="reveal"><div class="val" data-count="4" data-suffix="">0</div><div class="lbl">Credit hours</div></div>
+          <div class="reveal"><div class="val" data-count="1000" data-suffix="pt">0pt</div><div class="lbl">Total points</div></div>
+          <div class="reveal"><div class="val" data-count="12" data-suffix="ch">0ch</div><div class="lbl">Chapters covered</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MATERIALS -->
+    <section id="materials" class="block">
+      <div class="wrap">
+        <div class="reveal" style="max-width:640px;">
+          <div class="kicker">Get set up</div>
+          <h2 class="big">Everything you need lives in <span class="cyan">D2L</span>.</h2>
+          <p class="lead">Log in on day one and knock these out before the first exam. Reading the material is the single biggest predictor of your grade.</p>
+        </div>
+        <div class="cards" id="cards"></div>
+        <div class="reveal" style="margin-top:48px; display:flex; flex-wrap:wrap; gap:16px; align-items:center;">
+          <a href="https://d2l.lonestar.edu" target="_blank" class="btn" style="background:#fff; padding:16px 28px; font-size:14px;">🚀 Open D2L →</a>
+          <span style="font-size:12px; color:rgba(255,255,255,.4)">Navigation: Course Activities → Content / Course Materials</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- KICKOFF -->
+    <section id="kickoff" class="kickoff">
+      <video autoplay muted loop playsinline><source src="Intro to AP.mp4" type="video/mp4" /></video>
+      <div class="veil"></div>
+      <div class="wrap reveal" style="position:relative;">
+        <div class="ring"><div class="spin"></div><div class="core">🎥</div></div>
+        <span class="badge">Live course kickoff</span>
+        <h2>Thursday · July 16</h2>
+        <div class="time"><span class="cyan" style="font-weight:700">7:30 AM CST</span> · on Zoom</div>
+        <p class="note">Not required — but highly recommended. It's day one of the course. We'll walk through the syllabus, D2L, exam setup and how to win this fast-track session.</p>
+        <div style="margin-top:40px; display:flex; flex-direction:column; align-items:center; gap:12px;">
+          <a href="https://us02web.zoom.us/j/87378838613" target="_blank" class="btn" style="padding:16px 36px; font-size:15px;">Join the Zoom kickoff ↗</a>
+          <span style="font-size:11px; color:rgba(255,255,255,.35)">https://us02web.zoom.us/j/87378838613</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section id="roadmap" class="block">
+      <div class="wrap">
+        <div class="reveal" style="margin-bottom:64px;">
+          <div class="kicker">The 6-week map</div>
+          <h2 class="big">Six weeks. <span class="pulse">Zero</span> coasting.</h2>
+          <p class="lead">A new chapter almost every day. Here's the shape of it. Dates are tentative — always check weekly D2L announcements.</p>
+        </div>
+        <div class="timeline" id="timeline"><div class="line"></div></div>
+      </div>
+    </section>
+
+    <!-- GRADING -->
+    <section class="block">
+      <div class="wrap two">
+        <div>
+          <div class="reveal" style="margin-bottom:40px;">
+            <div class="kicker">How you're graded</div>
+            <h2 class="big" style="font-size:clamp(26px,5vw,44px)">1,000 points. <span class="cyan">100%</span> yours to earn.</h2>
+          </div>
+          <div id="grades"></div>
+          <p style="margin-top:24px; font-size:12px; color:rgba(255,255,255,.4)">Grade scale: A 90+ · B 80–89.9 · C 70–79.9 · D 60–69.9 · F below 60. Plus up to <span class="gold">5% extra credit</span>.</p>
+        </div>
+        <div>
+          <div class="reveal" style="margin-bottom:40px;">
+            <div class="kicker">Lock these in</div>
+            <h2 class="big" style="font-size:clamp(26px,5vw,44px)">Dates &amp; tech that <span class="pulse">matter</span>.</h2>
+          </div>
+          <div class="dategrid reveal">
+            <div class="datebox"><div class="k">Class starts</div><div class="v">Jul 16</div></div>
+            <div class="datebox"><div class="k">Official Day of Record</div><div class="v">July 20, 2026</div></div>
+            <div class="datebox"><div class="k">Withdrawal 'W' date</div><div class="v">August 11, 2026</div></div>
+            <div class="datebox"><div class="k">Final Exam</div><div class="v">August 21, 2026</div></div>
+          </div>
+          <div class="warn reveal">
+            <div style="font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--pulse)">⚠ Don't get dropped</div>
+            <p style="margin-top:8px; font-size:13px; line-height:1.7; color:rgba(255,255,255,.6)">You must complete <strong style="color:#fff">Lecture Exam 1</strong> by the Official Day of Record (July 20) or you'll be dropped and may lose financial aid. Exams need Chrome, a webcam and your phone as a second camera — no Chromebooks or iPads.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="wrap foot">
+        <div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:24px; font-weight:700; font-size:15px;">◈ A&amp;P II · BIOL 2402</div>
+          <p style="max-width:360px; font-size:14px; line-height:1.7; color:rgba(255,255,255,.5)">Human Anatomy &amp; Physiology II — Lone Star College – North Harris. Summer 2026, Session 6W2. You've got this. Finish strong. 💪</p>
+          <div class="support">
+            <div style="font-size:11px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--pulse)">🛠 Tech issues during an exam?</div>
+            <p style="margin-top:8px; font-size:13px; color:rgba(255,255,255,.6)">Don't email the instructor — contact OTS immediately to open a ticket, then email the ticket number.</p>
+            <a href="tel:8328136600" style="margin-top:12px; display:inline-block; font-size:16px; font-weight:700;">📞 832-813-6600</a>
+          </div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:32px;">
+          <div>
+            <div style="font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:12px;">Instructor</div>
+            <div style="font-size:15px; color:rgba(255,255,255,.85)">Dr. Victor Garcia Martinez</div>
+            <a href="mailto:Victor.H.GarciaMartinez@lonestar.edu" class="cyan" style="margin-top:4px; display:block; font-size:13px;">Victor.H.GarciaMartinez@lonestar.edu</a>
+            <div style="margin-top:8px; font-size:12px; color:rgba(255,255,255,.4)">WNSP-210G · LSC-North Harris</div>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:8px 24px;">
+            <a class="link" href="https://d2l.lonestar.edu" target="_blank">D2L ↗</a>
+            <a class="link" href="https://us02web.zoom.us/j/87378838613" target="_blank">Zoom kickoff ↗</a>
+            <a class="link" href="https://LoneStar.edu/starbundle" target="_blank">STAR Bundle ↗</a>
+            <a class="link" href="https://www.lonestar.edu/syllabus-policies" target="_blank">LSC policies ↗</a>
+          </div>
+        </div>
+      </div>
+      <div class="wrap copyr">© 2026 Lone Star College – North Harris. Syllabus subject to change — check D2L weekly.</div>
+    </footer>
+
+    <script>
+      // Data
+      const TICKER = ["Starts July 16","Endocrine","Circulatory","Immune","Respiratory","Digestive","Reproductive","Urinary","Homeostasis","Finish strong"];
+      const MATERIALS = [
+        {e:"🧪",tag:"MANDATORY",tone:"pulse",t:"Digital Lab Manual (Top Hat)",b:"Your required lab manual is bundled in the STAR Bundle. Find it under D2L → Course Materials. Issues? Read the D2L announcement instructions first."},
+        {e:"🤖",tag:"GRADED",tone:"cyan",t:"Notebook LM Activities",b:"Learn to use this AI tool to study & research any topic. 5 activities, 10% of your grade. All instructions live in D2L → Content."},
+        {e:"🔒",tag:"SET UP EARLY",tone:"cyan",t:"LockDown Browser + Respondus",b:"All exams are proctored. A second camera (your phone) is mandatory. Setup guide is under D2L → Content. Do this before Exam 1."},
+        {e:"📦",tag:"AUTO-ENROLLED",tone:"gold",t:"STAR Bundle",b:"All required materials are ready by day one, billed to your student account. You can opt out — but then you buy everything yourself."},
+        {e:"📖",tag:"RECOMMENDED",tone:"cyan",t:"Hole's Anatomy & Physiology",b:"McGraw Hill, Evergreen release. Highly recommended (not mandatory). Connect access is optional."},
+        {e:"💻",tag:"REQUIRED GEAR",tone:"pulse",t:"Laptop + Webcam",b:"Working laptop/desktop with webcam + internet. Chromebooks & iPads can't take exams. Google Chrome works best with D2L."}
+      ];
+      const ROADMAP = [
+        {w:"Week 1",d:"Jul 16–17",f:"Kickoff + Heart",x:"Course intro, Chapter 15 (Heart), lab safety & heart dissection."},
+        {w:"Week 2",d:"Jul 20–24",f:"Vessels · Endocrine · Blood",x:"Ch 13–16. Lecture Exam 1 on Jul 23 (Ch 12, 14, 15)."},
+        {w:"Week 3",d:"Jul 27–31",f:"Immunity · Respiration · Renal",x:"Ch 16, 19, 20. Lab Practical 1 (Jul 27). Lecture Exam 2 (Jul 31)."},
+        {w:"Week 4",d:"Aug 3–7",f:"Fluid Balance · Digestive",x:"Ch 17, 21. Lecture Exam 3 (Aug 5). Lab Practical 2 (Aug 7)."},
+        {w:"Week 5",d:"Aug 10–14",f:"Nutrition · Reproductive · Embryology",x:"Ch 18, 22, 23. Lecture Exam 4 (Aug 11)."},
+        {w:"Week 6",d:"Aug 17–21",f:"Genetics + Finals",x:"Ch 24. Lab Practical 3 (Aug 17). Lecture Exam 5 (Aug 19). Final Exam (Aug 21)."}
+      ];
+      const GRADING = [
+        {l:"Lecture Exams",d:"5 × 100 pts",p:50},
+        {l:"Lab Practicals",d:"3 × 70 pts",p:21},
+        {l:"Final Exam",d:"Comprehensive · Ch 1–12",p:10},
+        {l:"Notebook LM",d:"5 × 20 pts",p:10},
+        {l:"Lab Manual Units",d:"3 × 30 pts",p:9}
+      ];
+      const TONE = { pulse:{c:"var(--pulse)"}, cyan:{c:"var(--cyan)"}, gold:{c:"var(--gold)"} };
+
+      // Ticker
+      const tk = document.getElementById("ticker");
+      [...TICKER, ...TICKER].forEach(t => { const s=document.createElement("span"); s.innerHTML = t + ' <span class="cyan">✦</span>'; tk.appendChild(s); });
+
+      // Cards
+      const cw = document.getElementById("cards");
+      MATERIALS.forEach(m => {
+        const col = TONE[m.tone].c;
+        const el = document.createElement("div");
+        el.className = "card reveal";
+        el.innerHTML = `<div class="bar" style="background:${col}"></div>
+          <div class="top"><span class="emoji">${m.e}</span><span class="chip" style="color:${col}; border-color:${col}66; background:${col}1a">${m.tag}</span></div>
+          <h3>${m.t}</h3><div class="body">${m.b}</div>`;
+        cw.appendChild(el);
+      });
+
+      // Timeline
+      const tl = document.getElementById("timeline");
+      ROADMAP.forEach(r => {
+        const el = document.createElement("div");
+        el.className = "step reveal";
+        el.innerHTML = `<div class="dot"></div><div><span class="wk">${r.w}</span><span class="dt">${r.d}</span></div>
+          <div class="focus">${r.f}</div><div class="detail">${r.x}</div>`;
+        tl.appendChild(el);
+      });
+
+      // Grades
+      const gw = document.getElementById("grades");
+      GRADING.forEach(g => {
+        const el = document.createElement("div");
+        el.style.marginBottom = "20px";
+        el.innerHTML = `<div class="grow"><span>${g.l}</span><span class="d">${g.d}</span><span class="p">${g.p}%</span></div>
+          <div class="track"><i data-w="${Math.min(g.p*2,100)}"></i></div>`;
+        gw.appendChild(el);
+      });
+
+      // Reveal + count-up + bars via IntersectionObserver
+      const io = new IntersectionObserver((entries)=>{
+        entries.forEach(en=>{
+          if(!en.isIntersecting) return;
+          en.target.classList.add("in");
+          // count up
+          en.target.querySelectorAll?.("[data-count]").forEach(c=>animateCount(c));
+          if(en.target.matches?.("[data-count]")) animateCount(en.target);
+          // bars
+          en.target.querySelectorAll?.(".track i").forEach(b=>{ b.style.width = b.dataset.w + "%"; });
+          io.unobserve(en.target);
+        });
+      }, { threshold: 0.25 });
+      document.querySelectorAll(".reveal, [data-count]").forEach(el=>io.observe(el));
+
+      function animateCount(el){
+        const end = +el.dataset.count, suf = el.dataset.suffix || "";
+        const dur = 1400, start = performance.now();
+        function tick(now){
+          const p = Math.min((now-start)/dur,1), e = 1-Math.pow(1-p,3);
+          el.textContent = Math.round(end*e) + suf;
+          if(p<1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+    </script>
+  </body>
+</html>
