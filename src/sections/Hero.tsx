@@ -142,12 +142,35 @@ export function Hero({ entranceComplete }: { entranceComplete: boolean }) {
 
       {/* Scroll cue */}
       <motion.div
-        className="relative z-10 mt-6 flex items-center gap-2 text-[11px] uppercase tracking-[0.2em] text-white/40"
+        className="relative z-10 mt-8 flex items-center gap-2.5 text-[11px] uppercase tracking-[0.25em] text-white/40 hover:text-bio-cyan transition-colors duration-300 cursor-pointer w-fit"
         initial={{ opacity: 0 }}
         animate={{ opacity: entranceComplete ? 1 : 0 }}
         transition={{ duration: 1, delay: 1 }}
+        onClick={() => {
+          document.getElementById("start")?.scrollIntoView({ behavior: "smooth" });
+        }}
       >
-        <span className="animate-bounce">↓</span> Scroll to explore
+        <motion.div
+          animate={{ y: [0, 4, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+          className="text-bio-cyan"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <polyline points="19 12 12 19 5 12"></polyline>
+          </svg>
+        </motion.div>
+        <span>Scroll to explore</span>
       </motion.div>
     </section>
   );
