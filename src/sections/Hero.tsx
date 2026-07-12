@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { ScrambleIn } from "../components/ScrambleText";
-import { COURSE } from "../data";
+import { COURSE, LINKS } from "../data";
 
 export function Hero({ entranceComplete }: { entranceComplete: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -123,6 +123,15 @@ export function Hero({ entranceComplete }: { entranceComplete: boolean }) {
               className="rounded-full bg-bio-cyan px-6 py-3 text-[13px] font-bold text-black transition hover:bg-white"
             >
               Join the July 16 kickoff
+            </a>
+            <a
+              href={LINKS.syllabus}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="LSC BIOL2402 SU 26 6W2 Simple Syllabus.pdf"
+              className="rounded-full border border-white/25 px-6 py-3 text-[13px] font-medium text-white transition hover:border-white hover:bg-white/10"
+            >
+              Syllabus (PDF) 📄
             </a>
             <a
               href="#materials"

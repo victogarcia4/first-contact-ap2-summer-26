@@ -29,6 +29,7 @@ export const LINKS = {
   starBundle: "https://LoneStar.edu/starbundle",
   policies: "https://www.lonestar.edu/syllabus-policies",
   otsPhone: "832-813-6600",
+  syllabus: "/syllabus.pdf",
 };
 
 export const KICKOFF = {

@@ -77,6 +77,15 @@ export function Navbar({ entranceComplete }: { entranceComplete: boolean }) {
         {/* Right cluster */}
         <div className="flex items-center gap-2">
           <a
+            href={LINKS.syllabus}
+            target="_blank"
+            rel="noopener noreferrer"
+            download="LSC BIOL2402 SU 26 6W2 Simple Syllabus.pdf"
+            className="hidden h-11 items-center gap-2 rounded-[14px] border border-white/25 px-4 text-[13px] font-medium text-white transition hover:border-white hover:bg-white/10 sm:flex"
+          >
+            Syllabus (PDF) 📄
+          </a>
+          <a
             href="#kickoff"
             className="hidden h-11 items-center gap-2 rounded-full bg-bio-cyan px-5 text-[13px] font-bold text-black transition hover:bg-white sm:flex"
           >
@@ -113,6 +122,16 @@ export function Navbar({ entranceComplete }: { entranceComplete: boolean }) {
                 {n.label}
               </a>
             ))}
+            <a
+              href={LINKS.syllabus}
+              target="_blank"
+              rel="noopener noreferrer"
+              download="LSC BIOL2402 SU 26 6W2 Simple Syllabus.pdf"
+              onClick={() => setOpen(false)}
+              className="mt-1 rounded-xl border border-white/20 px-4 py-3 text-center text-[15px] font-medium text-white transition hover:bg-white/10"
+            >
+              Syllabus (PDF) 📄
+            </a>
             <a
               href={LINKS.zoom}
               target="_blank"
